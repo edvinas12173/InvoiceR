@@ -1,0 +1,10 @@
+@media screen and (min-width: 768px) {
+    .custom-text-right {
+        text-align: right;
+    }
+}
+@media screen and (max-width: 768px) {
+    .custom-text-right {
+        margin-top: 20px;
+    }
+}
