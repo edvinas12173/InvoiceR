@@ -19,7 +19,9 @@ class CreateInvoicesTable extends Migration
             $table->date('invoice_date');
             $table->date('invoice_due_date');
             $table->unsignedInteger('customer_id');
+            $table->unsignedInteger('user_id');
             $table->decimal('tax_percent')->default(0);
+            $table->string('status');
             $table->timestamps();
         });
     }

@@ -39,26 +39,28 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('invoices.index') }}">Invoices</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('customers.index') }}">Customers</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                                Settings
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Tax %</a>
-                                <a class="dropdown-item" href="#">Due Dates</a>
-                            </div>
-                        </li>
-                    </ul>
+                    @if (Auth::check())
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('invoices') ? 'active' : '' }}" href="{{ route('invoices.index') }}">Invoices</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('customers') ? 'active' : '' }}" href="{{ route('customers.index') }}">Customers</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                    Settings
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Tax %</a>
+                                    <a class="dropdown-item" href="#">Due Dates</a>
+                                </div>
+                            </li>
+                        </ul>
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->

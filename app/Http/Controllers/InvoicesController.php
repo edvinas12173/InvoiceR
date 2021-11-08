@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class InvoicesController extends Controller
 {
@@ -49,6 +50,8 @@ class InvoicesController extends Controller
         $invoice->invoice_date = $request->input('invoice_date');
         $invoice->invoice_due_date = $request->input('invoice_due_date');
         $invoice->invoice_no = $invNo;
+        $invoice->user_id = Auth::user()->id;
+        $invoice->status = 'Unpaid';
         $invoice->tax_percent = $request->input('tax_percent');
         $invoice->save();
 

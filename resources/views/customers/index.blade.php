@@ -11,40 +11,40 @@
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
-                        <tr class="text-center">
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Address</th>
-                            <th>Website</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr class="text-center">
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Website</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach($customers as $customer)
-                            <tr class="text-center">
-                                <td>{{ $customer->name }}</td>
-                                <td>{{ $customer->email }}</td>
-                                <td>{{ $customer->address }}</td>
-                                <td>{{ $customer->website }}</td>
-                                <th>
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-dark dropdown-toggle" type="button" id="dropdownCustomersList" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-list-ul"></i>
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownCustomersList">
-                                            <h6 class="dropdown-header">Actions</h6>
-                                            <a href="" class="dropdown-item"><i class="far fa-eye"></i> View</a>
-                                            <a class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
-                                            <form method="POST" action="{{ route('customers.destroy', $customer->id) }}">
-                                                @csrf
-                                                <input type="hidden" name="_method" value="DELETE">
-                                                <button type="submit" class="btn btn-white dropdown-item"><i class="far fa-trash-alt"></i> Delete</button>
-                                            </form>
+                            @foreach($customers as $customer)
+                                <tr class="text-center">
+                                    <td>{{ $customer->name }}</td>
+                                    <td>{{ $customer->email }}</td>
+                                    <td>{{ $customer->address }}</td>
+                                    <td>{{ $customer->website }}</td>
+                                    <th>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-dark dropdown-toggle" type="button" id="dropdownCustomersList" data-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-list-ul"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownCustomersList">
+                                                <h6 class="dropdown-header">Actions</h6>
+                                                <a href="{{ route('customers.show', $customer->id) }}" class="dropdown-item"><i class="far fa-eye"></i> View</a>
+                                                <a class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
+                                                <form method="POST" action="{{ route('customers.destroy', $customer->id) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="_method" value="DELETE">
+                                                    <button type="submit" class="btn btn-white dropdown-item"><i class="far fa-trash-alt"></i> Delete</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
-                            </tr>
-                        @endforeach
+                                    </th>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

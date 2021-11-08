@@ -17,6 +17,10 @@ class Invoice extends Model
         'tax_percent'
     ];
 
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function customer() {
         return $this->belongsTo(Customer::class, 'customer_id');
     }
