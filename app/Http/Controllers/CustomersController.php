@@ -15,6 +15,14 @@ class CustomersController extends Controller
         ]);
     }
 
+    public function create() {
+        return view('customer.create');
+    }
+
+    public function store(Request $request) {
+
+    }
+
     public function show($id) {
         $customer = Customer::findOrFail($id);
         $invoices = Invoice::where('customer_id', $id)->get();
