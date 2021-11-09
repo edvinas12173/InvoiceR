@@ -34,8 +34,9 @@ class CustomersController extends Controller
         $customer->website = $request->input('website');
         $customer->save();
 
-        return redirect()
-            ->route('customers.index');
+        return redirect(
+            '/customers/' . $customer->id
+        );
     }
 
     public function show($id) {
