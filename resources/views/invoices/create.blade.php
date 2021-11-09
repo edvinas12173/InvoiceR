@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            Create Invoice
+            Add a Invoice
             <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-dark float-right">Back</a>
         </div>
         <form action="{{ route('invoices.store') }}" method="post">

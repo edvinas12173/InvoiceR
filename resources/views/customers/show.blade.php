@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="card">
+        <div class="card-header">
+            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-sm btn-primary float-left">Edit</a>
+            <a href="{{ route('customers.index') }}" class="btn btn-sm btn-dark float-right">Back</a>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">

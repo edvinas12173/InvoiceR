@@ -34,7 +34,7 @@
                                             <div class="dropdown-menu" aria-labelledby="dropdownCustomersList">
                                                 <h6 class="dropdown-header">Actions</h6>
                                                 <a href="{{ route('customers.show', $customer->id) }}" class="dropdown-item"><i class="far fa-eye"></i> View</a>
-                                                <a class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
+                                                <a href="{{ route('customers.edit', $customer->id) }}" class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
                                                 <form method="POST" action="{{ route('customers.destroy', $customer->id) }}">
                                                     @csrf
                                                     <input type="hidden" name="_method" value="DELETE">
