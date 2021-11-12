@@ -41,7 +41,7 @@
                             <th>Invoice No.</th>
                             <th>Due Date</th>
                             <th>Total Amount</th>
-                            <th>Manager</th>
+                            <th>Created By</th>
                             <th>Status</th>
                             <th>Created At</th>
                             <th>Actions</th>

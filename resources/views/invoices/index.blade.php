@@ -16,7 +16,7 @@
                                 <th>Customer</th>
                                 <th>Due Date</th>
                                 <th>Total Amount</th>
-                                <th>Manager</th>
+                                <th>Created By</th>
                                 <th>Status</th>
                                 <th>Created At</th>
                                 <th>Actions</th>
@@ -30,7 +30,13 @@
                                     <td>{{ $invoice->invoice_due_date }}</td>
                                     <td>{{ number_format($invoice->total_amount+((($invoice->total_amount)/100)*$invoice->tax_percent), 2) }}</td>
                                     <td>{{ $invoice->user->name }}</td>
-                                    <td><span class="badge badge-warning text-uppercase">{{ $invoice->status }}</span></td>
+                                    <td>
+                                        @if( $invoice->status == "Unpaid")
+                                            <span class="badge badge-warning text-uppercase">{{ $invoice->status }}</span>
+                                        @else
+                                            <span class="badge badge-success text-uppercase">{{ $invoice->status }}</span>
+                                        @endif
+                                    </td>
                                     <td>{{ \Carbon\Carbon::parse($invoice->created_at)->diffForHumans() }}</td>
                                     <th>
                                         <div class="dropdown">
@@ -40,7 +46,7 @@
                                             <div class="dropdown-menu" aria-labelledby="dropdownInvoicesList">
                                                 <h6 class="dropdown-header">Actions</h6>
                                                 <a href="{{ route('invoices.show', $invoice->id) }}" class="dropdown-item"><i class="far fa-eye"></i> View</a>
-                                                <a class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
+                                                <a href="{{ route('invoices.edit', $invoice->id) }}" class="dropdown-item"><i class="far fa-edit"></i> Edit</a>
                                                 <form method="POST" action="{{ route('invoices.destroy', $invoice->id) }}">
                                                     @csrf
                                                     <input type="hidden" name="_method" value="DELETE">

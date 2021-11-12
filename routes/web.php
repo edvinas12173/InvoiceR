@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoicesController;
 use App\Http\Controllers\CustomersController;
-
+use App\Http\Controllers\TaxController;
+use App\Http\Controllers\DateController
+;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +24,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
     Route::resources([
         'invoices' => InvoicesController::class,
-        'customers' => CustomersController::class
+        'customers' => CustomersController::class,
+        'settings/taxs' => TaxController::class,
+        'settings/days' => DateController::class
     ]);
 });

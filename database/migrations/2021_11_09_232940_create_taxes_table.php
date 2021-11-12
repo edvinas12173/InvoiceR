@@ -15,6 +15,7 @@ class CreateTaxesTable extends Migration
     {
         Schema::create('taxes', function (Blueprint $table) {
             $table->id();
+            $table->decimal('tax_percent');
             $table->timestamps();
         });
     }

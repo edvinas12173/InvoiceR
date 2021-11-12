@@ -55,8 +55,8 @@
                                     Settings
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Tax %</a>
-                                    <a class="dropdown-item" href="#">Due Dates</a>
+                                    <a class="dropdown-item {{ request()->is('settings/taxs') ? 'active' : '' }}" href="{{ route('taxs.index') }}">Tax %</a>
+                                    <a class="dropdown-item {{ request()->is('settings/days') ? 'active' : '' }}" href="{{ route('days.index') }}">Due Dates</a>
                                 </div>
                             </li>
                         </ul>

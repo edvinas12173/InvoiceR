@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoicesItem;
+use App\Models\Date;
+use App\Models\Tax;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -23,8 +25,12 @@ class InvoicesController extends Controller
 
     public function create() {
         $customers = Customer::orderBy('name', 'ASC')->get();
+        $days = Date::orderBy('day', 'ASC')->get();
+        $taxs = Tax::orderBy('tax_percent', 'ASC')->get();
         return view('invoices.create', [
-            'customers' => $customers
+            'customers' => $customers,
+            'days' => $days,
+            'taxs' => $taxs
         ]);
     }
 
@@ -74,6 +80,51 @@ class InvoicesController extends Controller
         return view('invoices.show', [
            'invoice' => $invoice
         ]);
+    }
+
+    public function edit($id) {
+        $invoice = Invoice::findOrFail($id);
+        $items = InvoicesItem::where('invoice_id', $id)->get();
+        $customers = Customer::orderBy('name', 'ASC')->get();
+        $days = Date::orderBy('day', 'ASC')->get();
+        $taxs = Tax::orderBy('tax_percent', 'ASC')->get();
+        return view('invoices.edit', [
+            'invoice' => $invoice,
+            'items' => $items,
+            'customers' => $customers,
+            'days' => $days,
+            'taxs' => $taxs
+        ]);
+    }
+
+    public function update(Request $request, $id) {
+        $this->validate($request, [
+            'customer_id' => 'required',
+            'invoice_due_date' => 'required',
+            'status' => 'required',
+            'tax_percent' => 'required',
+            'product' => 'required',
+            'qty' => 'required',
+            'price' => 'required'
+        ]);
+
+        $invoice = Invoice::findOrFail($id);
+        $invoice->customer_id = $request->input('customer_id');
+        $invoice->invoice_due_date = $request->input('invoice_due_date');
+        $invoice->status = $request->input('status');
+        $invoice->tax_percent = $request->input('tax_percent');
+        $invoice->save();
+
+        $count_items = InvoicesItem::where('invoice_id', $id)->count();
+        for($i = 0; $i < $count_items; $i++) {
+            $item = InvoicesItem::findOrFail($request->input('id')[$i]);
+            $item->name = $request->input('product')[$i];
+            $item->quantity = $request->input('qty')[$i];
+            $item->price = $request->input('price')[$i];
+            $item->save();
+        }
+        return redirect()
+            ->route('invoices.index');
     }
 
     public function destroy($invoice_id) {

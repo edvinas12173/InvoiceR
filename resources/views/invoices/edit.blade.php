@@ -3,11 +3,12 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            Add a Invoice
+            Edit a Invoice
             <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-dark float-right">Back</a>
         </div>
-        <form action="{{ route('invoices.store') }}" method="post">
+        <form action="{{ route('invoices.update', $invoice->id) }}" method="post">
             @csrf
+            @method('PUT')
             <div class="card-body">
                 <div class="container">
                     <div class="row clearfix">
@@ -15,28 +16,40 @@
                             <div class="form-group">
                                 <label>Customer</label>
                                 <select name="customer_id" class="form-control">
-                                    <option selected>Choose...</option>
                                     @foreach($customers as $customer)
-                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        <option value="{{ $customer->id }}" {{$customer->id == $invoice->customer->id  ? 'selected' : ''}}>{{ $customer->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Invoice Date <small class="font-weight-bold">(After created date)</small></label>
-                                <input name="invoice_date" type="text" class="form-control" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
+                                <label>Invoice Date</label>
+                                <input name="invoice_date" type="text" class="form-control" value="{{ $invoice->invoice_date }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Invoice No.</label>
-                                <input name="invoice_no" type="text" class="form-control" value="INV-****" readonly>
+                                <input name="invoice_no" type="text" class="form-control" value="{{ $invoice->invoice_no }}" readonly>
                             </div>
                             <div class="form-group">
-                                <label>Due date</label>
+                                <label>Due date <small class="font-weight-bold">(After created date)</small></label>
                                 <select name="invoice_due_date" class="form-control">
                                     @foreach($days as $day)
-                                        <option value="{{ \Carbon\Carbon::now()->addDay($day->day)->format('Y-m-d') }}">After {{ $day->day }} days</option>
+                                        <option
+                                            value="{{ \Carbon\Carbon::parse($invoice->invoice_date)->addDay($day->day)->format('Y-m-d') }}"
+                                            {{\Carbon\Carbon::parse( $invoice->invoice_date )->diffInDays( $invoice->invoice_due_date) == $day->day  ? 'selected' : ''}}>
+                                            After {{ $day->day }} days
+                                        </option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Payment status</label>
+                                <select name="status" class="form-control">
+                                    <option value="Paid" {{$invoice->status == 'Paid'  ? 'selected' : ''}}>Paid</option >
+                                    <option value="Unpaid" {{$invoice->status == 'Unpaid'  ? 'selected' : ''}}>Unpaid</option >
                                 </select>
                             </div>
                         </div>
@@ -46,7 +59,7 @@
                         <div class="col-md-12">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="tab_logic">
-                                <thead>
+                                    <thead>
                                     <tr class="text-center">
                                         <th>#</th>
                                         <th>Product</th>
@@ -54,36 +67,33 @@
                                         <th>Price</th>
                                         <th>Total</th>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id='addr0'>
-                                        <td>
-                                            1
-                                        </td>
-                                        <td>
-                                            <input type="text" name='product[]'  placeholder='Enter Product Name' class="form-control"/>
-                                        </td>
-                                        <td>
-                                            <input type="number" name='qty[]' placeholder='Enter Qty' class="form-control qty" step="0" min="0"/>
-                                        </td>
-                                        <td>
-                                            <input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/>
-                                        </td>
-                                        <td>
-                                            <input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/>
-                                        </td>
-                                    </tr>
-                                    <tr id='addr1'>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($items as $item)
+                                        <tr>
+                                            <td hidden>
+                                                <input type="text" name="id[]" value="{{$item->id}}">
+                                            </td>
+                                            <td>
+                                                {{ $loop->iteration }}
+                                            </td>
+                                            <td>
+                                                <input type="text" name='product[]'  placeholder='Enter Product Name' value="{{ $item->name }}"  class="form-control"/>
+                                            </td>
+                                            <td>
+                                                <input type="number" name='qty[]' placeholder='Enter Qty' value="{{ $item->quantity }}" class="form-control qty" step="0" min="0"/>
+                                            </td>
+                                            <td>
+                                                <input type="number" name='price[]' placeholder='Enter Unit Price' value="{{ $item->price }}"  class="form-control price" step="0.00" min="0"/>
+                                            </td>
+                                            <td>
+                                                <input type="number" name='total[]' placeholder='0.00' class="form-control total" readonly/>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row clearfix">
-                        <div class="col-md-12">
-                            <a id="add_row" class="btn btn-sm btn-primary float-left">Add Row</a>
-                            <a id='delete_row' class="btn btn-sm btn-danger float-right">Delete Row</a>
                         </div>
                     </div>
                     <div class="row clearfix pt-4">
@@ -100,7 +110,7 @@
                                         <td class="text-center">
                                             <select name="tax_percent" id="tax" class="form-control">
                                                 @foreach($taxs as $tax)
-                                                    <option value="{{ $tax->tax_percent }}">{{ $tax->tax_percent }} %</option>
+                                                    <option value="{{ $tax->tax_percent }}" {{$tax->tax_percent == $invoice->tax_percent  ? 'selected' : ''}}>{{ $tax->tax_percent }} %</option>
                                                 @endforeach
                                             </select>
                                         </td>
@@ -137,27 +147,12 @@
 @section('js')
     <script>
         $(document).ready(function(){
-            var i=1;
-            $("#add_row").click(function(){b=i-1;
-                $('#addr'+i).html($('#addr'+b).html()).find('td:first-child').html(i+1);
-                $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
-                i++;
-            });
-            $("#delete_row").click(function(){
-                if(i>1){
-                    $("#addr"+(i-1)).html('');
-                    i--;
-                }
-                calc();
-            });
             $('#tab_logic tbody').on('keyup change',function(){
                 calc();
             });
             $('#tax').on('keyup change',function(){
                 calc_total();
             });
-
-
         });
 
         function calc()

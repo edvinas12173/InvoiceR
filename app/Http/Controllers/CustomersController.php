@@ -41,7 +41,7 @@ class CustomersController extends Controller
 
     public function show($id) {
         $customer = Customer::findOrFail($id);
-        $invoices = Invoice::where('customer_id', $id)->get();
+        $invoices = Invoice::where('customer_id', $id)->orderBy('created_at', 'DESC')->get();
         return view('customers.show', [
             'customer' => $customer,
             'invoices' => $invoices
